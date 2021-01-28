@@ -133,7 +133,7 @@ module.exports = {
           });
         },
         getUserProfile: function(req, res) {
-          // Getting auth header
+          // Get l'authentification du Header
           var headerAuth  = req.headers['authorization'];
           var userId      = jwtUtils.getUserId(headerAuth);
       
@@ -141,7 +141,7 @@ module.exports = {
             return res.status(400).json({ 'error': 'mauvais token' });
       
           models.User.findOne({
-            attributes: [ 'id', 'email', 'username', 'bio' ],
+            attributes: [ 'id', 'email', 'username', 'bio','createdAt','updatedAt' ],
             where: { id: userId }
           }).then(function(user) {
             if (user) {
