@@ -70,7 +70,7 @@ module.exports = {
         } 
 
         models.Post.findAll({
-           // order: [(order != null) ? order.split(':') : ['title', 'ASC']],
+            order: [(order != null) ? order.split(':') : ['title', 'ASC']],
             attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
             limit: (!isNaN(limit)) ? limit : null,
             offset: (!isNaN(offset)) ? offset : null,
@@ -90,6 +90,36 @@ module.exports = {
         });
     },
     userPost: function(req, res){
+        var headerAuth  = req.headers['authorization'];
+        var userId      = jwtUtils.getUserId(headerAuth);
 
+        var fields = req.query.fields;
+        var limit = parseInt(req.query.limit);
+        var offset = parseInt(req.query.offset)
+        var order = req.query.order;
+        if (limit > ITEMS_LIMIT) {
+            limit = ITEMS_LIMIT;
+        } 
+
+        models.Post.findAll({
+            order: [(order != null) ? order.split(':') : ['title', 'ASC']],
+            attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
+            limit: (!isNaN(limit)) ? limit : null,
+            offset: (!isNaN(offset)) ? offset : null,
+            where: { userId: userId },
+            include: [{
+                model: models.User,
+                attributes: [ 'username' ]
+            }]
+        }).then(function(messages) {
+            if (messages) {
+            res.status(200).json(messages);
+            } else {
+            res.status(404).json({ "error": "Post Non trouvé" });
+            }
+        }).catch(function(err) {
+            console.log(err);
+            res.status(500).json({ "error": "Champs Invalide" });
+        });
     },
 }
