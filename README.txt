@@ -1,4 +1,4 @@
-#ServerAPIFaceBoom
+## ServerAPIFaceBoom
 
 Cloner le projet,
 Allumer votre serveur SQL via WAMP ou MAMP sur Mac
@@ -8,9 +8,10 @@ Vous pouvez modifier le nom de la BDD dans le fichier ./config/config.JSON Je vo
 
 Ouvrer un nouveau terminal avec le chemin correspondant au projet du ServerAPIFaceBoom
 et entrer la commande suivante : sequelize db:migrate
+(Si la commande sequelize n'est pas reconnus, vous devez d'abord entrer la commande suivante : npm install -g sequelize-cli )
 Si tout fonctionne correctement , vous devriez retrouver les tables dans votre base de données MySQL
 
-Allumer le serveur via le terminal en entrant la commande suivante : nodemon index.js
+Allumer le serveur via le terminal en entrant la commande suivante : node index.js
 
 
 Ouvrer Postman (ou un autre logiciel de requete d'API)
