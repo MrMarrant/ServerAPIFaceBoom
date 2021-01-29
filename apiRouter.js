@@ -15,6 +15,7 @@ exports.router = (function(){
     apiRouter.route("/messages/new/").post(postsController.createPost);
     apiRouter.route("/messages/").get(postsController.everyPost);
     apiRouter.route("/messages/user/").get(postsController.userPost);
+    apiRouter.route("/messages/del/").delete(postsController.deletePost);
 
     return apiRouter;
 }) ();
