@@ -2,7 +2,6 @@ var jwtUtils = require('../utils/jwt.utils');
 var models = require("../models");
 var asyncLib  = require('async');
 //const { query } = require("express");
-
 const ITEMS_LIMIT   = 50;
 
 module.exports = {
@@ -120,6 +119,48 @@ module.exports = {
         }).catch(function(err) {
             console.log(err);
             res.status(500).json({ "error": "Champs Invalide" });
+        });
+    },
+    deletePost: function(req, res){
+        var idPost    = req.body.id;
+        var headerAuth  = req.headers['authorization'];
+        var userId      = jwtUtils.getUserId(headerAuth);
+
+        asyncLib.waterfall([
+            function(done){
+                models.Post.findOne({
+                    where: { id: idPost,
+                            UserId: userId},
+                    truncate: true
+                })
+                .then(function(postFound) {
+                    console.log(postFound)
+                    done(null, postFound);
+                })
+                .catch(function(err) {
+                    return res.status(500).json({ 'error': "Impossible de trouver le post ou vous n'avez pas les droits nécéssaire" });
+                });
+            },
+            function(postFound, done) {
+                if (postFound) {
+                    models.Post.destroy({
+                        where: { id: idPost }
+                    })
+                    .then(function (deletePost) {
+                        done(deletePost);
+                    });
+                
+                } else {
+                    return res.status(404).json({ 'error': 'Post non trouvé' });
+                }
+            },
+        ], function(deletePost){
+                if (deletePost) {
+                    return res.status(201).json(deletePost);
+                }
+                else {
+                    return res.status(500).json({"error": "Impossible de supprimer le post"});
+                }
         });
     },
 }
