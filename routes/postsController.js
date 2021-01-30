@@ -91,6 +91,7 @@ module.exports = {
     userPost: function(req, res){
         var headerAuth  = req.headers['authorization'];
         var userId      = jwtUtils.getUserId(headerAuth);
+        console.log(userId)
 
         var fields = req.query.fields;
         var limit = parseInt(req.query.limit);
@@ -160,6 +161,54 @@ module.exports = {
                 }
                 else {
                     return res.status(500).json({"error": "Impossible de supprimer le post"});
+                }
+        });
+    },
+    updatePost: function(req, res){
+        var idPost    = req.body.id;
+        var title = req.body.title;
+        var description = req.body.description;
+        var headerAuth  = req.headers['authorization'];
+        var userId      = jwtUtils.getUserId(headerAuth)
+
+        asyncLib.waterfall([
+            function(done){
+                models.Post.findOne({
+                    attributes: ['id','userId', 'title', 'description'],
+                    where: { id: idPost,
+                            UserId: userId},
+                    truncate: true
+                })
+                .then(function(postFound) {
+                    console.log(postFound)
+                    done(null, postFound);
+                })
+                .catch(function(err) {
+                    return res.status(500).json({ 'error': "Impossible de trouver le post ou vous n'avez pas les droits nécéssaire" });
+                });
+            },
+            function(postFound, done) {
+                if (postFound) {
+                    postFound.update({
+                        title: title,
+                        description: description
+                    })
+                    .then(function () {
+                        done(postFound);
+                    }).catch(function(err) {
+                        res.status(500).json({ 'error': 'Impossible de mettre à jour le post' });
+                    });
+                
+                } else {
+                    return res.status(404).json({ 'error': 'Post non trouvé' });
+                }
+            },
+        ], function(updatePost){
+                if (updatePost) {
+                    return res.status(201).json(updatePost);
+                }
+                else {
+                    return res.status(500).json({"error": "Impossible de mettre à jour le post"});
                 }
         });
     },
