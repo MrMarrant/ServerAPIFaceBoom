@@ -1,0 +1,5 @@
+'node_modules' 
+
+
+# Local development
+*.env
