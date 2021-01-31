@@ -3,7 +3,7 @@
     "username": "rireceeadmin",
     "password": "Alouat50trin",
     "database": "rireceeadmin",
-    "host": "https://phpmyadmin.cluster028.hosting.ovh.net/db_structure.php?server=1&db=rireceeadmin",
+    "host": "rireceeadmin.mysql.db",
     "dialect": "mysql"
   },
   "test": {
