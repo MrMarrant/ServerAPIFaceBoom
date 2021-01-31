@@ -3,7 +3,7 @@
     "username": "rireceeadmin",
     "password": "Alouat50trin",
     "database": "rireceeadmin",
-    "host": "rireceeadmin.mysql.db",
+    "host": "mysql://rireceeadmin:Alouat50trin@rireceeadmin.mysql.db/rireceeadmin?serverVersion=5.7",
     "dialect": "mysql"
   },
   "test": {
