@@ -8,9 +8,7 @@ var server = express();
 server.use(bodyParser.urlencoded({ extended: true}));
 server.use(bodyParser.json());
 
-server.listen(PORT, function() {
-    console.log('Serveur en ligne');
-});
+
 
 server.get('/', function (req, res){
 
@@ -22,6 +20,9 @@ server.use("/api/", apiRouter);
 
 
 // Lance le serveur
-server.listen(8080, function(){
-    console.log("Serveur en route!")
-})
+server.listen(PORT, function() {
+    console.log('Serveur en route!');
+});
+// server.listen(8080, function(){
+//     console.log("Serveur en route!")
+// })
