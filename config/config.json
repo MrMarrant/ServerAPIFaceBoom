@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "rireceeadmin",
-    "password": "Alouat50trin",
-    "database": "rireceeadmin",
-    "host": "mysql://pku6owsawib512ia:wf6qddzmjat2108g@esilxl0nthgloe1y.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/bkx4ex9jc17au3b3",
+    "username": "root",
+    "password": "null",
+    "database": "database_development",
+    "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "test": {
