@@ -4,6 +4,7 @@
   "description": "Serveur HTTP Servant dAPI pour le projet mobile Faceboom",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "MrMarrant",
@@ -17,5 +18,9 @@
     "mysql": "^2.18.1",
     "mysql2": "^2.2.5",
     "sequelize": "^6.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MrMarrant/ServerAPIFaceBoom"
   }
 }
