@@ -17,6 +17,21 @@ module.exports = {
         var password = req.body.password; 
         var bio = req.body.bio; 
 
+        var mysql = require('mysql');
+
+var con = mysql.createConnection({
+  host: "https://phpmyadmin.cluster028.hosting.ovh.net/",
+  user: "rireceeadmin",
+  password: "Alouat50trin",
+  database: "rireceeadmin"
+});
+
+con.connect(function(err) {
+  if (err){
+    console.log("Failed!");
+    throw err;} 
+  console.log("Connected!");
+});
 
         if (email == null || username == null || password == null) {
             return res.status(400).json({"error": "Paramètres Manquant"});
