@@ -19,19 +19,15 @@ module.exports = {
 
         var mysql = require('mysql');
 
-var con = mysql.createConnection({
-  host: "10.9.115.93",
-  user: "rireceeadmin",
-  password: "Alouat50trin",
-  database: "rireceeadmin"
-});
-
-con.connect(function(err) {
-  if (err){
-    console.log("Failed!");
-    throw err;} 
-  console.log("Connected!");
-});
+        var connection = mysql.createConnection(process.env.JAWSDB_URL);
+        
+        connection.connect(function(err) {
+          if (err){
+            console.log("Failed!");
+            // throw err;
+          } 
+          console.log("Connected!");
+        });
 
         if (email == null || username == null || password == null) {
             return res.status(400).json({"error": "Paramètres Manquant"});
