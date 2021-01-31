@@ -20,7 +20,7 @@ module.exports = {
         var mysql = require('mysql');
 
 var con = mysql.createConnection({
-  host: "https://phpmyadmin.cluster028.hosting.ovh.net/",
+  host: "https://phpmyadmin.cluster028.hosting.ovh.net/db_structure.php?server=1&db=rireceeadmin",
   user: "rireceeadmin",
   password: "Alouat50trin",
   database: "rireceeadmin"
