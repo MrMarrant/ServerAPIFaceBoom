@@ -1,4 +1,4 @@
-var bcrypt = require("bcrypt");
+var bcrypt = require("bcrypt-nodejs");
 var jwtUtils = require('../utils/jwt.utils');
 var models = require("../models");
 var asyncLib  = require('async');
