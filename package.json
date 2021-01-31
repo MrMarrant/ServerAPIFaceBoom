@@ -2,6 +2,9 @@
   "name": "serverapi",
   "version": "1.0.0",
   "description": "Serveur HTTP Servant dAPI pour le projet mobile Faceboom",
+  "engines": {
+    "node": "14.x"
+  },
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
