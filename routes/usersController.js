@@ -55,7 +55,7 @@ module.exports = {
                 done(null, userFound);
               })
               .catch(function(err) {
-                return res.status(500).json({ 'error': "Impossible de vérifier l'utilisateur" });
+                return res.status(500).json({ 'error': "Impossible de vérifier l'utilisateur : " + err });
               });
             },
             function(userFound, done) {
