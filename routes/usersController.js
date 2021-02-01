@@ -20,6 +20,7 @@ module.exports = {
         var mysql = require('mysql');
 
         var connection = mysql.createConnection(process.env.JAWSDB_URL);
+        
 
         if (email == null || username == null || password == null) {
             return res.status(400).json({"error": "Paramètres Manquant"});
@@ -37,30 +38,17 @@ module.exports = {
             return res.status(400).json({"error": "Mot de Passe Non Valide"});           
         }
 
-
         
 
         connection.connect(function(err) {
           if (err){console.log("Failed!"); throw err;} 
           else {
             console.log("Connected!");
-            bcrypt.hash(user.password, null, null, function(err, hash) {
-
-              if (err) {
-                console.log("bcrypt.hash "+err);
-                throw err;
-              } 
-          
-              var sql = "INSERT INTO Users (email, username, password, bio) VALUES (email,username ,hash, bio)";
-              connection.query(sql, function (err, result) {
-                if (err) {
-                  console.log("Erreur SQL");
-                  throw err;}
-                console.log("1 record inserted");
-              } );
-
-            });        
-          }
+          var sql = "INSERT INTO Users (email, username, password, bio) VALUES (email,username ,password, bio)";
+          connection.query(sql, function (err, result) {
+            if (err){throw "erreur SQL : " + err;} 
+            console.log("1 record inserted");
+          } ); }
         });
 
         
