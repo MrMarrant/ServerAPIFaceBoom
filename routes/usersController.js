@@ -63,13 +63,15 @@ module.exports = {
                 where: { email: email }
               })
               .then(function(userFound) {
+                console.log("Je passe la")
                 done(null, userFound);
               })
-              // .catch(function(err,userFound) {
-              //   return res.status(500).json({ 'error': "Impossible de vérifier l'utilisateur : " + err + "and function userFound : " + userFound });
-              // });
+              .catch(function(err,userFound) {
+                return res.status(500).json({ 'error': "Impossible de vérifier l'utilisateur : " + err + "and function userFound : " + userFound });
+              });
             },
             function(userFound, done) {
+              console.log("Je passe ici")
               if (!userFound) {
                 bcrypt.hash(password, 5, function( err, bcryptedPassword ) {
                   done(null, userFound, bcryptedPassword);
