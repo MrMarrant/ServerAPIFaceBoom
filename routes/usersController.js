@@ -65,9 +65,9 @@ module.exports = {
               .then(function(userFound) {
                 done(null, userFound);
               })
-              .catch(function(err,userFound) {
-                return res.status(500).json({ 'error': "Impossible de vérifier l'utilisateur : " + err + "and function userFound : " + userFound });
-              });
+              // .catch(function(err,userFound) {
+              //   return res.status(500).json({ 'error': "Impossible de vérifier l'utilisateur : " + err + "and function userFound : " + userFound });
+              // });
             },
             function(userFound, done) {
               if (!userFound) {
