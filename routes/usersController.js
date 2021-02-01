@@ -1,4 +1,4 @@
-var bcrypt = require("bcrypt-nodejs");
+var bcrypt = require("bcrypt");
 var jwtUtils = require('../utils/jwt.utils');
 var models = require("../models");
 var asyncLib  = require('async');
@@ -73,9 +73,11 @@ module.exports = {
             function(userFound, done) {
               console.log("Je passe ici")
               if (!userFound) {
-                bcrypt.hash(password, 5,null, function( err, bcryptedPassword ) {
-                  done(null, userFound, bcryptedPassword);
+                bcrypt.genSalt(10, function(err, salt) {
+                  bcrypt.hash(password, salt, function( err, bcryptedPassword ) {
+                    done(null, userFound, bcryptedPassword);
                 });
+              });
               } else {
                 return res.status(409).json({ 'error': 'Utilisateur déjà existant' });
               }
