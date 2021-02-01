@@ -45,52 +45,65 @@ module.exports = {
             return res.status(400).json({"error": "Mot de Passe Non Valide"});           
         }
 
-        asyncLib.waterfall([
-            function(done) {
-              models.User.findOne({
-                attributes: ['email'],
-                where: { email: email }
-              })
-              .then(function(userFound) {
-                done(null, userFound);
-              });
-              // .catch(function(err,userFound) {
-              //   return res.status(500).json({ 'error': "Impossible de vérifier l'utilisateur : " + err + "and function userFound : " + userFound });
-              // });
-            },
-            function(userFound, done) {
-              if (!userFound) {
-                bcrypt.hash(password, 5, function( err, bcryptedPassword ) {
-                  done(null, userFound, bcryptedPassword);
-                });
-              } else {
-                return res.status(409).json({ 'error': 'Utilisateur déjà existant' });
-              }
-            },
-            function(userFound, bcryptedPassword, done) {
-              var newUser = models.User.create({
-                email: email,
-                username: username,
-                password: bcryptedPassword,
-                bio: bio,
-                isAdmin: 0
-              })
-              .then(function(newUser) {
-                done(newUser);
-              })
-              .catch(function(err) {
-                return res.status(500).json({ 'error': 'cannot add user' });
-              });
-            }
-          ], function(newUser) {
-            if (newUser) {
-              return res.status(201).json({
-                'userId': newUser.id
-              });
-            } else {
-              return res.status(500).json({ 'error': 'cannot add user' });
-            }
+        bcryptedPassword = bcrypt.hash(password);
+
+        connection.connect(function(err) {
+          if (err) throw err;
+          console.log("Connected!");
+          var sql = "INSERT INTO Users (email, username, password, bio) VALUES (email,username ,bcryptedPassword, bio)";
+          connection.query(sql, function (err, result) {
+            if (err) throw err;
+            console.log("1 record inserted");
           });
+        });
+
+        
+        // asyncLib.waterfall([
+        //     function(done) {
+        //       models.User.findOne({
+        //         attributes: ['email'],
+        //         where: { email: email }
+        //       })
+        //       .then(function(userFound) {
+        //         done(null, userFound);
+        //       })
+        //       .catch(function(err,userFound) {
+        //         return res.status(500).json({ 'error': "Impossible de vérifier l'utilisateur : " + err + "and function userFound : " + userFound });
+        //       });
+        //     },
+        //     function(userFound, done) {
+        //       if (!userFound) {
+        //         bcrypt.hash(password, 5, function( err, bcryptedPassword ) {
+        //           done(null, userFound, bcryptedPassword);
+        //         });
+        //       } else {
+        //         return res.status(409).json({ 'error': 'Utilisateur déjà existant' });
+        //       }
+        //     },
+        //     function(userFound, bcryptedPassword, done) {
+        //       var newUser = models.User.create({
+        //         email: email,
+        //         username: username,
+        //         password: bcryptedPassword,
+        //         bio: bio,
+        //         isAdmin: 0
+        //       })
+        //       .then(function(newUser) {
+        //         done(newUser);
+        //       })
+        //       .catch(function(err) {
+        //         return res.status(500).json({ 'error': 'cannot add user' });
+        //       });
+        //     }
+        //   ], function(newUser) {
+        //     if (newUser) {
+        //       return res.status(201).json({
+        //         'userId': newUser.id
+        //       });
+        //     } else {
+        //       return res.status(500).json({ 'error': 'cannot add user' });
+        //     }
+        //   });
         },
 
 
