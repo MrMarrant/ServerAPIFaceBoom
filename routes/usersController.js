@@ -47,13 +47,15 @@ module.exports = {
             bcrypt.hash(user.password, null, null, function(err, hash) {
 
               if (err) {
-                logger.error("bcrypt.hash "+err);
-                return next(err);
+                console.log("bcrypt.hash "+err);
+                throw err;
               } 
           
               var sql = "INSERT INTO Users (email, username, password, bio) VALUES (email,username ,hash, bio)";
               connection.query(sql, function (err, result) {
-                if (err) {throw "erreur SQL : " + err;}
+                if (err) {
+                  console.log("Erreur SQL");
+                  throw err;}
                 console.log("1 record inserted");
               } );
 
