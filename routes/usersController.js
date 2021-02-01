@@ -21,10 +21,13 @@ module.exports = {
 
         var connection = mysql.createConnection(process.env.JAWSDB_URL);
         
-        console.log(email);
-        console.log(username);
-        console.log(password);
-        console.log(bio);
+        connection.connect(function(err) {
+          if (err){
+            console.log("Failed!");
+            // throw err;
+          } 
+          console.log("Connected!");
+        });
 
         if (email == null || username == null || password == null) {
             return res.status(400).json({"error": "Paramètres Manquant"});
@@ -45,13 +48,13 @@ module.exports = {
         bcryptedPassword = bcrypt.hash(password);
 
         connection.connect(function(err) {
-          if (err) throw err;
-          console.log("Connected!");
+          if (err){console.log("Failed!"); throw err;} 
+          else {console.log("Connected!");
           var sql = "INSERT INTO Users (email, username, password, bio) VALUES (email,username ,bcryptedPassword, bio)";
           connection.query(sql, function (err, result) {
             if (err) throw "erreur SQL : " + err;
             console.log("1 record inserted");
-          });
+          } ); }
         });
 
         
