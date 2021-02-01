@@ -88,11 +88,14 @@ module.exports = {
                 bio: bio,
                 isAdmin: 0
                 // Une erreur avec les dates ?
+                // SequelizeDatabaseError: Column 'password' cannot be null
               })
               .then(function(newUser) {
                 done(newUser);
               })
               .catch(function(err) {
+                console.log("mdp crypté : " + bcryptedPassword)
+                console.log("mdp non crypté : " + password)
                 return res.status(500).json({ 'error': 'cannot add user 1, err : ' +err });
               });
             }
