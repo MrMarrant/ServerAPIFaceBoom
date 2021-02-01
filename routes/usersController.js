@@ -44,7 +44,7 @@ module.exports = {
           if (err){console.log("Failed!"); throw err;} 
           else {
             console.log("Connected!");
-          var sql = "INSERT INTO Users (email, username, password, bio) VALUES ('${email}','${username}' ,'${password}', '${bio}')";
+          var sql = "INSERT INTO Users (email, username, password, bio) VALUES ("+email+","+username+","+password+","+bio+")";
           connection.query(sql, function (err, result) {
             if (err){throw "erreur SQL : " + err;} 
             console.log("1 record inserted");
