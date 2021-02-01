@@ -40,68 +40,68 @@ module.exports = {
 
         
 
-        connection.connect(function(err) {
-          if (err){console.log("Failed!"); throw err;} 
-          else {
-            console.log("Connected!");
-          var sql = "INSERT INTO Users (email, username, password, bio) VALUES (?,?,?,?)";
-          connection.query(sql,[email,username, password, bio], function (err, result) {
-            if (err){throw "erreur SQL : " + err;} 
-            console.log("1 record inserted");
-            return res.status(201).json({
-                    'userId': 1
-                    });
-          }); 
-        }
-        });
+        // connection.connect(function(err) {
+        //   if (err){console.log("Failed!"); throw err;} 
+        //   else {
+        //     console.log("Connected!");
+        //   var sql = "INSERT INTO Users (email, username, password, bio) VALUES (?,?,?,?)";
+        //   connection.query(sql,[email,username, password, bio], function (err, result) {
+        //     if (err){throw "erreur SQL : " + err;} 
+        //     console.log("1 record inserted");
+        //     return res.status(201).json({
+        //             'userId': 1
+        //             });
+        //   }); 
+        // }
+        // });
 
         
-        // asyncLib.waterfall([
-        //     function(done) {
-        //       models.User.findOne({
-        //         attributes: ['email'],
-        //         where: { email: email }
-        //       })
-        //       .then(function(userFound) {
-        //         done(null, userFound);
-        //       })
-        //       .catch(function(err,userFound) {
-        //         return res.status(500).json({ 'error': "Impossible de vérifier l'utilisateur : " + err + "and function userFound : " + userFound });
-        //       });
-        //     },
-        //     function(userFound, done) {
-        //       if (!userFound) {
-        //         bcrypt.hash(password, 5, function( err, bcryptedPassword ) {
-        //           done(null, userFound, bcryptedPassword);
-        //         });
-        //       } else {
-        //         return res.status(409).json({ 'error': 'Utilisateur déjà existant' });
-        //       }
-        //     },
-        //     function(userFound, bcryptedPassword, done) {
-        //       var newUser = models.User.create({
-        //         email: email,
-        //         username: username,
-        //         password: bcryptedPassword,
-        //         bio: bio,
-        //         isAdmin: 0
-        //       })
-        //       .then(function(newUser) {
-        //         done(newUser);
-        //       })
-        //       .catch(function(err) {
-        //         return res.status(500).json({ 'error': 'cannot add user' });
-        //       });
-        //     }
-        //   ], function(newUser) {
-        //     if (newUser) {
-        //       return res.status(201).json({
-        //         'userId': newUser.id
-        //       });
-        //     } else {
-        //       return res.status(500).json({ 'error': 'cannot add user' });
-        //     }
-        //   });
+        asyncLib.waterfall([
+            function(done) {
+              models.User.findOne({
+                attributes: ['email'],
+                where: { email: email }
+              })
+              .then(function(userFound) {
+                done(null, userFound);
+              })
+              .catch(function(err,userFound) {
+                return res.status(500).json({ 'error': "Impossible de vérifier l'utilisateur : " + err + "and function userFound : " + userFound });
+              });
+            },
+            function(userFound, done) {
+              if (!userFound) {
+                bcrypt.hash(password, 5, function( err, bcryptedPassword ) {
+                  done(null, userFound, bcryptedPassword);
+                });
+              } else {
+                return res.status(409).json({ 'error': 'Utilisateur déjà existant' });
+              }
+            },
+            function(userFound, bcryptedPassword, done) {
+              var newUser = models.User.create({
+                email: email,
+                username: username,
+                password: bcryptedPassword,
+                bio: bio,
+                isAdmin: 0
+              })
+              .then(function(newUser) {
+                done(newUser);
+              })
+              .catch(function(err) {
+                return res.status(500).json({ 'error': 'cannot add user' });
+              });
+            }
+          ], function(newUser) {
+            if (newUser) {
+              return res.status(201).json({
+                'userId': newUser.id
+              });
+            } else {
+              return res.status(500).json({ 'error': 'cannot add user' });
+            }
+          });
         },
 
 
