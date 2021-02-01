@@ -87,12 +87,13 @@ module.exports = {
                 password: bcryptedPassword,
                 bio: bio,
                 isAdmin: 0
+                // Une erreur avec les dates ?
               })
               .then(function(newUser) {
                 done(newUser);
               })
               .catch(function(err) {
-                return res.status(500).json({ 'error': 'cannot add user' });
+                return res.status(500).json({ 'error': 'cannot add user 1, err : ' +err });
               });
             }
           ], function(newUser) {
@@ -101,7 +102,7 @@ module.exports = {
                 'userId': newUser.id
               });
             } else {
-              return res.status(500).json({ 'error': 'cannot add user' });
+              return res.status(500).json({ 'error': 'cannot add user 2, err : ' +err  });
             }
           });
         },
