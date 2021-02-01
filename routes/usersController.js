@@ -73,7 +73,7 @@ module.exports = {
             function(userFound, done) {
               console.log("Je passe ici")
               if (!userFound) {
-                bcrypt.hash(password, salt,null, function( err, bcryptedPassword ) {
+                bcrypt.hash(password, 5,null, function( err, bcryptedPassword ) {
                   done(null, userFound, bcryptedPassword);
                 });
               } else {
