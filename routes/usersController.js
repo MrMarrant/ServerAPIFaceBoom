@@ -186,13 +186,26 @@ module.exports = {
         deleteUser: function(req, res){
           var headerAuth  = req.headers['authorization'];
           var userId      = jwtUtils.getUserId(headerAuth);
-          var isAdmin     = req.body.isAdmin;
           var banHammer   = req.body.idDelet;
   
           asyncLib.waterfall([
-              function(done){
-                if (isAdmin == 1){}
-                else{return res.status(500).json({ 'error': "l'utilisateur n'est pas Admin" });}
+            function(done) {
+              models.User.findOne({
+                where: { id: userId},
+                truncate: true
+            })
+            .then(function(userAdminFound) {
+                console.log("Id Utilisateur conecté : " + userAdminFound);
+                if (userAdminFound.isAdmin == 1){}
+                else{return res.status(500).json({ 'error': "l'utilisateur connecté n'est pas Admin" });}
+                done(null, userAdminFound);
+            })
+            .catch(function(err) {
+                return res.status(500).json({ 'error': "Impossible de trouver l'utilisateur connecté ou vous n'avez pas les droits nécéssaire" });
+            });
+          },
+              function(userAdminFound){
+                
                   models.User.findOne({
                       where: { id: banHammer},
                       truncate: true
@@ -202,7 +215,7 @@ module.exports = {
                       done(null, UserFound);
                   })
                   .catch(function(err) {
-                      return res.status(500).json({ 'error': "Impossible de trouver l'utilisateur ou vous n'avez pas les droits nécéssaire" });
+                      return res.status(500).json({ 'error': "Impossible de trouver l'utilisateur à supprimer" });
                   });
               },
               function(UserFound, done) {
@@ -215,7 +228,7 @@ module.exports = {
                       });
                   
                   } else {
-                      return res.status(404).json({ 'error': 'Utilisateur non trouvé' });
+                      return res.status(404).json({ 'error': "L'utilisateur à supprimer n'a pas été trouvé" });
                   }
               },
           ], function(deleteUser){
@@ -223,7 +236,7 @@ module.exports = {
                       return res.status(201).json(deleteUser);
                   }
                   else {
-                      return res.status(500).json({"error": "Impossible de supprimer le l'utilisateur"});
+                      return res.status(500).json({"error": "Impossible de supprimer l'utilisateur"});
                   }
           });
       },
