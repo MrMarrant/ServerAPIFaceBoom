@@ -198,20 +198,20 @@ module.exports = {
                 console.log("Id Utilisateur conecté : " + userAdminFound.id);
                 if (userAdminFound.isAdmin == 1){}
                 else{return res.status(500).json({ 'error': "l'utilisateur connecté n'est pas Admin" });}
-                done(null, userAdminFound);
+                done(null);
             })
             .catch(function(err) {
                 return res.status(500).json({ 'error': "Impossible de trouver l'utilisateur connecté ou vous n'avez pas les droits nécéssaire" });
             });
           },
-              function(userAdminFound){
+              function(done){
                 
                   models.User.findOne({
                       where: { id: banHammer},
                       truncate: true
                   })
                   .then(function(UserFound) {
-                      console.log("id de l'utilisateur à supprimer : " + UserFound.id + ", email : " + UserFound.email);
+                      console.log("id de l'utilisateur à supprimer : " + UserFound.id);
                       done(null, UserFound);
                   })
                   .catch(function(err) {

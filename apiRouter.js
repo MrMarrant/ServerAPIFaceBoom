@@ -8,7 +8,6 @@ exports.router = (function(){
     // Route User
     apiRouter.route("/users/register/").post(usersController.register);
     apiRouter.route("/users/login/").post(usersController.login);
-    apiRouter.route("/users/delete/").delete(usersController.deleteUser);
     apiRouter.route("/users/me/").get(usersController.getUserProfile);
     apiRouter.route("/users/me/").put(usersController.updateUserProfile);
     
@@ -18,6 +17,11 @@ exports.router = (function(){
     apiRouter.route("/messages/user/").get(postsController.userPost);
     apiRouter.route("/messages/del/").delete(postsController.deletePost);
     apiRouter.route("/messages/update/").put(postsController.updatePost);
+
+     // Route Admin
+    apiRouter.route("/messages/del/admin").delete(postsController.deletePostAdmin);
+    apiRouter.route("/messages/update/admin").put(postsController.updatePostAdmin);
+    apiRouter.route("/users/delete/").delete(usersController.deleteUser);
 
     return apiRouter;
 }) ();

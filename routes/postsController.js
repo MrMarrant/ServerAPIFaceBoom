@@ -164,6 +164,62 @@ module.exports = {
                 }
         });
     },
+    deletePostAdmin: function(req, res){
+        var idPost    = req.body.id;
+        var headerAuth  = req.headers['authorization'];
+        var userId      = jwtUtils.getUserId(headerAuth);
+
+        asyncLib.waterfall([
+            function(done) {
+                models.User.findOne({
+                    where: { id: userId},
+                    truncate: true
+            })
+            .then(function(userAdminFound) {
+                console.log("Id Utilisateur conecté : " + userAdminFound.id);
+                if (userAdminFound.isAdmin == 1){}
+                else{return res.status(500).json({ 'error': "l'utilisateur connecté n'est pas Admin" });}
+                done(null);
+            })
+            .catch(function(err) {
+                return res.status(500).json({ 'error': "Impossible de trouver l'utilisateur connecté ou vous n'avez pas les droits nécéssaire" });
+            });
+            },
+            function(done){
+                models.Post.findOne({
+                    where: { id: idPost},
+                    truncate: true
+                })
+                .then(function(postFound) {
+                    console.log(postFound)
+                    done(null, postFound);
+                })
+                .catch(function(err) {
+                    return res.status(500).json({ 'error': "Impossible de trouver le post ou vous n'avez pas les droits nécéssaire" });
+                });
+            },
+            function(postFound, done) {
+                if (postFound) {
+                    models.Post.destroy({
+                        where: { id: idPost }
+                    })
+                    .then(function (deletePost) {
+                        done(deletePost);
+                    });
+                
+                } else {
+                    return res.status(404).json({ 'error': 'Post non trouvé' });
+                }
+            },
+        ], function(deletePost){
+                if (deletePost) {
+                    return res.status(201).json(deletePost);
+                }
+                else {
+                    return res.status(500).json({"error": "Impossible de supprimer le post"});
+                }
+        });
+    },
     updatePost: function(req, res){
         var idPost    = req.body.id;
         var title = req.body.title;
@@ -182,6 +238,68 @@ module.exports = {
                 .then(function(postFound) {
                     console.log(postFound)
                     done(null, postFound);
+                })
+                .catch(function(err) {
+                    return res.status(500).json({ 'error': "Impossible de trouver le post ou vous n'avez pas les droits nécéssaire" });
+                });
+            },
+            function(postFound, done) {
+                if (postFound) {
+                    postFound.update({
+                        title: title,
+                        description: description
+                    })
+                    .then(function () {
+                        done(postFound);
+                    }).catch(function(err) {
+                        res.status(500).json({ 'error': 'Impossible de mettre à jour le post' });
+                    });
+                
+                } else {
+                    return res.status(404).json({ 'error': 'Post non trouvé' });
+                }
+            },
+        ], function(updatePost){
+                if (updatePost) {
+                    return res.status(201).json(updatePost);
+                }
+                else {
+                    return res.status(500).json({"error": "Impossible de mettre à jour le post"});
+                }
+        });
+    },
+    updatePostAdmin: function(req, res){
+        var idPost    = req.body.id;
+        var title = req.body.title;
+        var description = req.body.description;
+        var headerAuth  = req.headers['authorization'];
+        var userId      = jwtUtils.getUserId(headerAuth)
+
+        asyncLib.waterfall([
+            function(done) {
+                models.User.findOne({
+                    where: { id: userId},
+                    truncate: true
+            })
+            .then(function(userAdminFound) {
+                console.log("Id Utilisateur conecté : " + userAdminFound.id);
+                if (userAdminFound.isAdmin == 1){}
+                else{return res.status(500).json({ 'error': "l'utilisateur connecté n'est pas Admin" });}
+                done(null, userAdminFound);
+            })
+            .catch(function(err) {
+                return res.status(500).json({ 'error': "Impossible de trouver l'utilisateur connecté ou vous n'avez pas les droits nécéssaire" });
+            });
+            },
+            function(done){
+                models.Post.findOne({
+                    attributes: ['id','userId', 'title', 'description'],
+                    where: { id: idPost},
+                    truncate: true
+                })
+                .then(function(postFound) {
+                    console.log(postFound)
+                    done(null);
                 })
                 .catch(function(err) {
                     return res.status(500).json({ 'error': "Impossible de trouver le post ou vous n'avez pas les droits nécéssaire" });
