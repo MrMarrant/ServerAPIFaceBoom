@@ -211,11 +211,11 @@ module.exports = {
                       truncate: true
                   })
                   .then(function(UserFound) {
-                      console.log("id de l'utilisateur à supprimer" + UserFound.id);
+                      console.log("id de l'utilisateur à supprimer : " + UserFound.id + ", email : " + UserFound.email);
                       done(null, UserFound);
                   })
                   .catch(function(err) {
-                      return res.status(500).json({ 'error': "Impossible de trouver l'utilisateur à supprimer" });
+                      return res.status(500).json({ 'error': "Impossible de trouver l'utilisateur à supprimer, err : " + err });
                   });
               },
               function(UserFound, done) {
