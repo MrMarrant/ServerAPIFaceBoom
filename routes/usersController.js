@@ -153,6 +153,50 @@ module.exports = {
             res.status(500).json({ 'error': 'cannot fetch user' });
           });
         },
+        deleteUser: function(req, res){
+          var headerAuth  = req.headers['authorization'];
+          var userId      = jwtUtils.getUserId(headerAuth);
+          var isAdmin     = req.body.isAdmin;
+          var banHammer   = req.body.idDelet;
+  
+          asyncLib.waterfall([
+              function(done){
+                if (isAdmin == 1){}
+                else{return res.status(500).json({ 'error': "l'utilisateur n'est pas Admin" });}
+                  models.User.findOne({
+                      where: { id: banHammer},
+                      truncate: true
+                  })
+                  .then(function(UserFound) {
+                      console.log(UserFound)
+                      done(null, UserFound);
+                  })
+                  .catch(function(err) {
+                      return res.status(500).json({ 'error': "Impossible de trouver l'utilisateur ou vous n'avez pas les droits nécéssaire" });
+                  });
+              },
+              function(UserFound, done) {
+                  if (UserFound) {
+                      models.User.destroy({
+                          where: { id: banHammer }
+                      })
+                      .then(function (deleteUser) {
+                          done(deleteUser);
+                      });
+                  
+                  } else {
+                      return res.status(404).json({ 'error': 'Utilisateur non trouvé' });
+                  }
+              },
+          ], function(deleteUser){
+                  if (deleteUser) {
+                      return res.status(201).json(deleteUser);
+                  }
+                  else {
+                      return res.status(500).json({"error": "Impossible de supprimer le l'utilisateur"});
+                  }
+          });
+      },
         updateUserProfile: function(req, res) {
           // Getting auth header
           var headerAuth  = req.headers['authorization'];
