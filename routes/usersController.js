@@ -195,7 +195,7 @@ module.exports = {
                 truncate: true
             })
             .then(function(userAdminFound) {
-                console.log("Id Utilisateur conecté : " + userAdminFound);
+                console.log("Id Utilisateur conecté : " + userAdminFound.id);
                 if (userAdminFound.isAdmin == 1){}
                 else{return res.status(500).json({ 'error': "l'utilisateur connecté n'est pas Admin" });}
                 done(null, userAdminFound);
@@ -211,7 +211,7 @@ module.exports = {
                       truncate: true
                   })
                   .then(function(UserFound) {
-                      console.log(UserFound)
+                      console.log("id de l'utilisateur à supprimer" + UserFound.id);
                       done(null, UserFound);
                   })
                   .catch(function(err) {
